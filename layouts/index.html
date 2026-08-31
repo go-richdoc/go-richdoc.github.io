@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{ .Site.Title }} — One rich-document model, and the formats that convert into it.</title>
+<meta name="description" content="One rich-document model, and the formats that convert into it. Pure Go, CGO_ENABLED=0.">
+<link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}">
+<link rel="stylesheet" href="{{ "css/brand.css" | relURL }}">
+<script src="{{ "js/theme.js" | relURL }}"></script>
+</head><body>
+<section class="hero">
+  <button id="themebtn" class="theme" type="button">Theme: System</button>
+  <img src="{{ "img/go-richdoc-white.png" | relURL }}" alt="go-richdoc">
+  <h1>go-richdoc</h1>
+  <p>One rich-document model, and the formats that convert into it.</p>
+  <div class="btns">
+    <a class="btn btn-solid" href="https://pkg.go.dev/github.com/go-richdoc/richdoc">Reference</a>
+    <a class="btn btn-ghost" href="https://github.com/go-richdoc">GitHub</a>
+  </div>
+</section>
+<div class="wrap">
+  <div class="panel">
+    <h2>What is go-richdoc?</h2>
+    <p>A document is worth one representation, not one per format. go-richdoc is that representation — and the converters that read and write it, so Markdown, LaTeX and reStructuredText meet in the middle instead of pairwise. Pure Go, CGO_ENABLED=0.</p>
+  </div>
+  <h2 class="section">Packages</h2>
+  <p class="sub">{{ len hugo.Data.pkgs.packages }} module(s) in this organisation.</p>
+  <div class="grid">
+    {{ range hugo.Data.pkgs.packages }}
+    <div class="card">
+      <div class="chip">{{ .chip }}</div>
+      <div class="nm">{{ .name }}</div>
+      <div class="ds">{{ .desc }}</div>
+      <div class="lk"><a href="{{ .url }}">GitHub</a> · <a href="{{ .doc }}">pkg.go.dev</a></div>
+    </div>
+    {{ end }}
+  </div>
+</div>
+<footer>Built with Hugo · Pure Go, CGO=0 · Branding from <a href="https://github.com/go-richdoc/brand">go-richdoc/brand</a></footer>
+</body></html>

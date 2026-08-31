@@ -1,0 +1,5 @@
+packages:
+  - { name: "richdoc", chip: "R", desc: "The document model every converter reads and writes.", url: "https://github.com/go-richdoc/richdoc", doc: "https://pkg.go.dev/github.com/go-richdoc/richdoc" }
+  - { name: "markdown", chip: "M", desc: "Markdown (CommonMark + GFM) ⇄ richdoc.", url: "https://github.com/go-richdoc/markdown", doc: "https://pkg.go.dev/github.com/go-richdoc/markdown" }
+  - { name: "latex", chip: "L", desc: "LaTeX ⇄ richdoc.", url: "https://github.com/go-richdoc/latex", doc: "https://pkg.go.dev/github.com/go-richdoc/latex" }
+  - { name: "rst", chip: "R", desc: "reStructuredText ⇄ richdoc, on the go-docutils engine.", url: "https://github.com/go-richdoc/rst", doc: "https://pkg.go.dev/github.com/go-richdoc/rst" }
