@@ -1,41 +1,148 @@
-<!doctype html>
-<html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-{{/* Dark Reader repaints pages that already draw their own dark theme, as this one does: ask it to stand aside. */}}
-<meta name="darkreader-lock">
-<title>{{ .Site.Title }} — One rich-document model, and the formats that convert into it.</title>
-<meta name="description" content="One rich-document model, and the formats that convert into it. Pure Go, CGO_ENABLED=0.">
-<link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}">
-<link rel="stylesheet" href="{{ "css/brand.css" | relURL }}">
-<script src="{{ "js/theme.js" | relURL }}"></script>
-</head><body>
-<section class="hero">
-  <button id="themebtn" class="theme" type="button">Theme: System</button>
-  <img src="{{ "img/go-richdoc-white.png" | relURL }}" alt="go-richdoc">
-  <h1>go-richdoc</h1>
-  <p>One rich-document model, and the formats that convert into it.</p>
-  <div class="btns">
-    <a class="btn btn-solid" href="https://pkg.go.dev/github.com/go-richdoc/richdoc">{{ partial "icons/book.html" . }}Reference</a>
-    <a class="btn btn-ghost" href="https://github.com/go-richdoc">{{ partial "icons/mark-github.html" . }}GitHub</a>
-  </div>
-</section>
-<div class="wrap">
-  <div class="panel">
-    <h2>What is go-richdoc?</h2>
-    <p>A document is worth one representation, not one per format. go-richdoc is that representation — and the converters that read and write it, so Markdown, LaTeX and reStructuredText meet in the middle instead of pairwise. Pure Go, CGO_ENABLED=0.</p>
-  </div>
-  <h2 class="section">Packages</h2>
-  <p class="sub">{{ len hugo.Data.pkgs.packages }} module(s) in this organisation.</p>
-  <div class="grid">
-    {{ range hugo.Data.pkgs.packages }}
-    <div class="card">
-      <div class="chip">{{ .chip }}</div>
-      <div class="nm">{{ .name }}</div>
-      <div class="ds">{{ .desc }}</div>
-      <div class="lk"><a href="{{ .url }}">GitHub</a> · <a href="{{ .doc }}">pkg.go.dev</a></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ .Site.Title }} — one document model, and the formats that meet in it</title>
+<meta name="description" content="go-richdoc — a neutral document model in pure Go, and converters for Markdown, reStructuredText, LaTeX, FictionBook, CSV, JSON and XML. Formats meet in the middle instead of pairwise: six modules rather than the twenty converters every pair would need.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+{{/* ⛔ This meta is what the deploy VERIFIES. go-ooxml's Pages source was a
+     branch, so for three hours it served Jekyll's rendering of README.md
+     while its workflow built the Hugo site and reported success. The deploy
+     now fetches the live URL and fails unless the generator is Hugo, so
+     removing this line breaks the deploy rather than the page. */}}
+{{ hugo.Generator }}
+{{ partial "styles.html" . }}
+</head>
+<body class="lm">
+  <header class="nav"><div class="wrap">
+    <a class="brand" href="/"><img class="glyph" src="/img/logo.svg" width="32" height="32" alt="go-richdoc logo"> go-richdoc</a>
+    <nav><a href="#middle">Why a model</a><a href="#use">Use it</a><a href="#repos">Repositories</a><a href="#fidelity">Fidelity</a><a href="#arches">Where it runs</a></nav>
+    {{ partial "theme-toggle.html" . }}
+  </div></header>
+  {{ partial "fork-ribbon.html" "https://github.com/go-richdoc/richdoc" }}
+
+  <div class="hero"><div class="wrap">
+    <div>
+      <h1 class="head">One document model,<br><span class="accent">and the formats that meet in it.</span></h1>
+      <p class="sub">A document is worth one representation, not one per format. <code>richdoc</code> is that representation, and the rest of this organisation reads and writes it — so Markdown, reStructuredText, LaTeX, FictionBook and a CSV meet <b>in the middle</b> instead of pairwise. Pure Go, <code>CGO_ENABLED=0</code>, <code>GOOS=js</code> included. BSD-3-Clause.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://pkg.go.dev/github.com/go-richdoc/richdoc">{{ partial "icons/book.html" . }}The model →</a>
+        <a class="btn btn-ghost" href="https://github.com/go-richdoc">{{ partial "icons/github.html" . }}Read the source</a>
+      </div>
+      {{/* ⛔ DERIVED. A count typed beside the data it counts is right the day
+           it is typed and has no way of staying right. The third figure is
+           ARITHMETIC on the first: n(n-1) ordered pairs of formats, which is
+           the whole argument for a model and is worth being exact about. */}}
+      {{ $n := len .Site.Params.repos }}{{ $formats := sub $n 1 }}
+      <div class="trust"><span><b>{{ $n }}</b> modules</span><span><b>{{ len .Site.Params.targets }}</b> build targets</span><span><b>{{ mul $formats (sub $formats 1) }}</b> pairwise converters not written</span></div>
     </div>
-    {{ end }}
-  </div>
-</div>
-<footer>Built with Hugo · Pure Go, CGO=0 · Branding from <a href="https://github.com/go-richdoc/brand">go-richdoc/brand</a></footer>
-</body></html>
+    <div class="term">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="t">main.go</span></div>
+<pre><span class="c-com">// Read one format, write another. The middle is the point.</span>
+doc, _ := markdown.Parse(src)
+out, _ := rst.Write(doc)
+
+<span class="c-com">// An ebook, a spreadsheet's worth of rows, a paper.</span>
+doc, _ = fb2.Parse(book, fb2.Limits{})
+doc, _ = csv.Parse(rows, csv.Options{})
+doc, _ = latex.Parse(paper)
+
+<span class="c-com">// And what a document IS, all of it:</span>
+<span class="c-out">Heading Paragraph List CodeBlock BlockQuote
+Table ThematicBreak MathBlock RawBlock
+Text Emph Strong Strikethrough Code Link
+Image Math LineBreak RawInline</span></pre>
+    </div>
+  </div></div>
+
+  <div class="strip"><div class="wrap">
+    <span class="lead-line">One organisation, <b>{{ len .Site.Params.repos }}</b> modules, every one of them pure Go</span>
+    <div class="mods">{{ range .Site.Params.repos }}<a href="#repos">{{ .name }}</a>{{ end }}</div>
+    {{/* ⛔ TARGETS BUILT. Not "architectures the tests run on" -- that is a
+         different claim, and the one go-ooxml's page made while its tests ran
+         on amd64 alone. See #arches, which says which is which. */}}
+    <span class="lead-line">building for <b>{{ len .Site.Params.targets }}</b> targets, <code>js/wasm</code> among them</span>
+    <div class="mods">{{ range .Site.Params.targets }}<a href="#arches">{{ . }}</a>{{ end }}</div>
+  </div></div>
+
+  <section id="middle"><div class="wrap">
+    <span class="eyebrow">Why a model at all</span>
+    {{ $n := len .Site.Params.repos }}{{ $formats := sub $n 1 }}
+    <h2>{{ $formats }} formats pairwise would be <i>{{ mul $formats (sub $formats 1) }} converters</i>.</h2>
+    <p class="lead">Each would have to understand two formats at once, and every format added would need another for each one already there. Through a model it is two pieces of work per format — read it, write it — and a reader written once is a reader every writer can use. That is the whole architecture, and the arithmetic is why.</p>
+    <div class="grid">
+      <div class="card"><div class="ico">🔒</div><h3>Closed interface sets</h3><p>Every block and inline type carries an unexported marker method, so a converter can type-switch over all of them and <b>the compiler knows when a case is missing</b>. A model open to new node types would make every converter silently incomplete.</p></div>
+      <div class="card"><div class="ico">📦</div><h3>Nothing but the tree</h3><p><code>richdoc</code> does no rendering, no parsing and no I/O. It is the one dependency every converter here shares, and the reason it can be shared is that it has nothing in it to disagree with.</p></div>
+      <div class="card"><div class="ico">🪆</div><h3>A cell holds blocks</h3><p>Not a line of text. reST's grid tables and HTML's <code>&lt;td&gt;</code> both allow a paragraph, a list and a table inside one cell, so a model whose cell is a string cannot carry what either format wrote.</p></div>
+      <div class="card"><div class="ico">🧾</div><h3><code>RawBlock</code> and <code>RawInline</code></h3><p>Format-specific passthrough, kept with the format's name beside it. It is what lets a LaTeX round trip return the macro nobody has modelled yet, instead of dropping it and calling the result lossless.</p></div>
+    </div>
+  </div></section>
+
+  <section id="use"><div class="wrap">
+    <span class="eyebrow">The two directions</span>
+    <h2>Read it once, write it anywhere.</h2>
+    <p class="lead">Markdown, reStructuredText and LaTeX read <b>and</b> write; FictionBook and the data formats read. Which directions a module has is in its description below, because "converter" said of a one-way reader is the kind of claim that costs somebody an afternoon.</p>
+    <div class="term" style="margin-top:22px">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="t">zsh</span></div>
+<pre><span class="c-cmd">$ richdata</span> sales.csv
+<span class="c-out">| Region | Units | Revenue |
+|:-------|------:|--------:|   a table is the obvious shape for a CSV;
+| North  | 1 204 | 48 160  |   what the package decides is everything else</span>
+<span class="c-cmd">$ richdata</span> -format json -title Orders orders.json
+<span class="c-cmd">$ richdata</span> -o notes.md -verbatim server.log
+<span class="c-out">a log file left verbatim, rather than parsed
+into something it is not</span></pre>
+    </div>
+  </div></section>
+
+  <section id="repos"><div class="wrap">
+    <span class="eyebrow">The organisation</span>
+    <h2>One module a format, and the model in the middle.</h2>
+    <p class="lead">Each is its own module with its own release line, so a program takes the model and the one format it reads — never a stack of parsers it will not call.</p>
+    <div class="grid">
+      {{ range .Site.Params.repos }}
+      <article class="card">
+        <h3><a href="{{ .url }}">{{ .name }}</a> <span class="tag {{ .status }}">{{ .status }}</span></h3>
+        <p>{{ .blurb | markdownify }}</p>
+        <p><a href="{{ .url }}">repository</a> · <a href="https://pkg.go.dev/{{ .pkg }}">pkg.go.dev</a></p>
+      </article>
+      {{ end }}
+    </div>
+  </div></section>
+
+  <section id="fidelity"><div class="wrap">
+    <span class="eyebrow">What a round trip is for</span>
+    <h2>Reversible is easy. <i>Faithful</i> is the work.</h2>
+    <p class="lead">A converter that loses nothing it can represent is still wrong if it adds what the author never wrote — and that is the harder failure, because nothing is missing to notice.</p>
+    <div class="grid">
+      <div class="card"><div class="ico">🏷️</div><h3>An anchor nobody wrote</h3><p>goldmark can generate an id for every heading. <code>markdown</code> leaves that <b>off</b>, because the writer would then stamp a <code>{#id}</code> into source that never had one — a diff on every heading of every file, from a converter that was asked to preserve the document.</p></div>
+      <div class="card"><div class="ico">🔁</div><h3>Delegate where a parser exists</h3><p>CommonMark goes through goldmark and reST through go-docutils, because both are full, tested, pure-Go parsers. <code>latex</code> ships its own only because go-tex's tokenizer is internal — a compile API, not a parse tree.</p></div>
+      <div class="card"><div class="ico">📐</div><h3>A heading's level is where it sat</h3><p>FictionBook has no <code>&lt;h2&gt;</code>, only a section inside a section, and a title broken over several <code>&lt;p&gt;</code> for the line breaks. Three headings where a reader sees one is a document that navigates wrongly.</p></div>
+      <div class="card"><div class="ico">⛔</div><h3>Said, when it is not kept</h3><p><code>&lt;sub&gt;</code> and <code>&lt;sup&gt;</code> have no node here, so FictionBook's text is kept and its position is not: losing the 2 of <code>H2O</code> to say so would be the worse trade. Every such decision is in the module's README, with the reason.</p></div>
+    </div>
+  </div></section>
+
+  <section id="arches"><div class="wrap">
+    <span class="eyebrow">Where it runs</span>
+    <h2>{{ len .Site.Params.targets }} build targets, and the suites run on amd64.</h2>
+    <p class="lead">⛔ Said precisely, because the precise claim is cheap and the vague one is not true: every module here cross-builds for {{ $n := len .Site.Params.targets }}{{ range $i, $t := .Site.Params.targets }}{{ if $i }}{{ if eq $i (sub $n 1) }} and {{ else }}, {{ end }}{{ end }}<code>{{ $t }}</code>{{ end }}, and runs its tests on <code>amd64</code> with the race detector. Where byte order is the risk rather than a worry — a ZIP's little-endian integers in <a href="https://go-ooxml.github.io/">go-ooxml</a> — the suite runs under qemu on five more architectures, big-endian included. These libraries are a tree and a great deal of string handling, which is a different risk.</p>
+    <div class="grid">
+      <div class="card"><div class="ico">🌐</div><h3><code>js/wasm</code> is a target, not an afterthought</h3><p>Nothing here opens a file: a converter takes bytes and returns bytes. An editor that converts a document in a browser tab needs no server, and nothing it reads leaves the machine.</p></div>
+      <div class="card"><div class="ico">🧮</div><h3>CGO is off everywhere</h3><p>Which is what makes <code>js/wasm</code> and the cross-builds possible at all, and why a binary that embeds any of these carries no C toolchain's worth of assumptions.</p></div>
+      <div class="card"><div class="ico">📚</div><h3>Documentation of its own</h3><p><a href="https://go-richdoc.github.io/docs/">The docs site</a> is built by MkDocs and versioned with mike, so a reader can look at the release they are using rather than at main.</p></div>
+      <div class="card"><div class="ico">🖨️</div><h3>And out the other side, a PDF</h3><p><a href="https://go-pdfkit.github.io/">go-pdfkit</a> composes a richdoc document, which is what makes <code>.fb2</code> → PDF or <code>.md</code> → PDF a two-step with no format-specific code in between.</p></div>
+    </div>
+  </div></section>
+
+  <section id="eco" style="padding-top:6px"><div class="wrap">
+    <div class="band">
+      <h2>The model, {{ sub (len .Site.Params.repos) 1 }} formats, and one place where they meet.</h2>
+      <p>A document read here can be written as Markdown, reStructuredText or LaTeX, laid out as a PDF by go-pdfkit, or edited in a browser tab — because all of them speak the same tree.</p>
+      <a class="btn btn-ghost" href="https://github.com/go-richdoc">{{ partial "icons/github.html" . }}Read the source on GitHub →</a>
+    </div>
+  </div></section>
+
+  <footer><div class="wrap"><span>© the go-richdoc authors · BSD-3-Clause</span><span>Pure Go · CGO_ENABLED=0 · <code>GOOS=js</code> included</span></div></footer>
+</body>
+</html>
