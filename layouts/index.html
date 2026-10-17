@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ .Site.Title }} — one document model, and the formats that meet in it</title>
-<meta name="description" content="go-richdoc — a neutral document model in pure Go, and converters for Markdown, reStructuredText, LaTeX, FictionBook, CSV, JSON and XML. Formats meet in the middle instead of pairwise: six modules rather than the twenty converters every pair would need.">
+<meta name="description" content="go-richdoc — a neutral document model in pure Go, and converters for Markdown, reStructuredText, LaTeX, HTML, EPUB, FictionBook, email, CSV, JSON and XML. Formats meet in the middle instead of pairwise: nine modules rather than the fifty-six converters every pair would need.">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 {{/* ⛔ This meta is what the deploy VERIFIES. go-ooxml's Pages source was a
      branch, so for three hours it served Jekyll's rendering of README.md
@@ -25,7 +25,7 @@
   <div class="hero"><div class="wrap">
     <div>
       <h1 class="head">One document model,<br><span class="accent">and the formats that meet in it.</span></h1>
-      <p class="sub">A document is worth one representation, not one per format. <code>richdoc</code> is that representation, and the rest of this organisation reads and writes it — so Markdown, reStructuredText, LaTeX, FictionBook and a CSV meet <b>in the middle</b> instead of pairwise. Pure Go, <code>CGO_ENABLED=0</code>, <code>GOOS=js</code> included. BSD-3-Clause.</p>
+      <p class="sub">A document is worth one representation, not one per format. <code>richdoc</code> is that representation, and the rest of this organisation reads and writes it — so Markdown, reStructuredText, LaTeX, HTML, an EPUB, a FictionBook, an email and a CSV all meet <b>in the middle</b> instead of pairwise. Pure Go, <code>CGO_ENABLED=0</code>, <code>GOOS=js</code> included. BSD-3-Clause.</p>
       <div class="cta">
         <a class="btn btn-primary" href="https://pkg.go.dev/github.com/go-richdoc/richdoc">{{ partial "icons/book.html" . }}The model →</a>
         <a class="btn btn-ghost" href="https://github.com/go-richdoc">{{ partial "icons/github.html" . }}Read the source</a>
@@ -43,10 +43,12 @@
 doc, _ := markdown.Parse(src)
 out, _ := rst.Write(doc)
 
-<span class="c-com">// An ebook, a spreadsheet's worth of rows, a paper.</span>
-doc, _ = fb2.Parse(book, fb2.Limits{})
-doc, _ = csv.Parse(rows, csv.Options{})
+<span class="c-com">// An ebook, a letter, a page, a paper, some rows.</span>
+doc, _ = epub.Parse(book, epub.Limits{})
+doc, _ = email.Parse(eml, email.Limits{})
+doc, _ = html.Parse(page, html.Limits{})
 doc, _ = latex.Parse(paper)
+doc, _ = csv.Parse(rows, csv.Options{})
 
 <span class="c-com">// And what a document IS, all of it:</span>
 <span class="c-out">Heading Paragraph List CodeBlock BlockQuote
@@ -82,7 +84,7 @@ Image Math LineBreak RawInline</span></pre>
   <section id="use"><div class="wrap">
     <span class="eyebrow">The two directions</span>
     <h2>Read it once, write it anywhere.</h2>
-    <p class="lead">Markdown, reStructuredText and LaTeX read <b>and</b> write; FictionBook and the data formats read. Which directions a module has is in its description below, because "converter" said of a one-way reader is the kind of claim that costs somebody an afternoon.</p>
+    <p class="lead">Markdown, reStructuredText and LaTeX read <b>and</b> write; HTML, EPUB, FictionBook, email and the data formats read. Which directions a module has is in its description below, because "converter" said of a one-way reader is the kind of claim that costs somebody an afternoon — and a module that only reads is not unfinished: an EPUB and a mailbox are <i>sources</i>, and writing one back is a job nobody has asked for.</p>
     <div class="term" style="margin-top:22px">
       <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="t">zsh</span></div>
 <pre><span class="c-cmd">$ richdata</span> sales.csv
