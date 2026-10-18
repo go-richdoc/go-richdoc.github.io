@@ -17,7 +17,7 @@ disableKinds = ["taxonomy", "term", "RSS", "sitemap", "404"]
   [[module.imports]]
     path = "github.com/go-fleettools/landingkit"
 
-# ⛔ TARGETS BUILT, which is not "architectures the tests run on". These six
+# ⛔ TARGETS BUILT, which is not "architectures the tests run on". These ten
 # modules cross-build for ten targets and run their suites on amd64 with the
 # race detector. Only go-ooxml, where a ZIP's little-endian integers are the
 # risk, runs its suite under qemu as well -- and its landing claimed six
@@ -107,6 +107,13 @@ disableKinds = ["taxonomy", "term", "RSS", "sitemap", "404"]
   url = "https://github.com/go-richdoc/epub"
   status = "ready"
   blurb = "**EPUB 2 and 3 in.** An EPUB is three things in a trench coat — a ZIP, a manifest and an order — and none of them is the content. ⛔ Nothing is found by its path: the container names the package document, which names its content, and the **spine** is the only thing that says what order to read it in; an alphabetical walk of the archive puts chapter 10 before chapter 2. An image becomes its bytes, and the same picture referred to fifty times is inflated once. Measured on eleven real books (7 480 to 377 683 words each) which are deliberately **not** in the repository: they are somebody's library, and a fixture a test ships has to be one the repository may carry."
+
+[[params.repos]]
+  name = "mobi"
+  pkg = "github.com/go-richdoc/mobi"
+  url = "https://github.com/go-richdoc/mobi"
+  status = "ready"
+  blurb = "**Kindle MOBI in** — three formats stacked on each other, and reading one is reading all three: a Palm database of records, a record 0 holding the PalmDOC and MOBI headers, and the book itself as ONE HTML document cut into 4096-byte pieces and each piece compressed on its own. ⛔ The bytes at the end of a text record **are not text and are not compressed** — indexing data, and the overlap of a multibyte character split across two records — and feeding them to the decompressor does not fail: it produces plausible rubbish at the end of every record. ⛔ Pictures are named by **record number**, two different ways, and `kindle:embed:003C` is **base 32** and one-based: read as hexadecimal it would be wrong for every picture past the thirty-first and still look right for the first nine. Measured against Project Gutenberg's own *Pride and Prejudice* with Gutenberg's plain text of the same book as the judge: 125 816 words against 126 630, and 3 638 of 4 215 long sentences found verbatim. DRM, HUFF/CDIC and KF8 are refused **by name**, because none of those files is defective."
 
 [[params.repos]]
   name = "email"
