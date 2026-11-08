@@ -49,19 +49,33 @@ jobs:
         with:
           path: public
 
-  # ⛔ THIS REPOSITORY IS A GO MODULE, which is easy to forget because its
-  # output is a web page. `kit.go` pins github.com/go-fleettools/landingkit,
-  # Hugo resolves that module with the go command at the version go.mod names
-  # (see the build job above), and landingkit brings a dependency graph of its
-  # own. So the site is built from Go code whose advisories nobody was asking
-  # about: `gofloor go-richdoc` reported this repository alongside the ten
-  # libraries as "no govulncheck step", and it was the last one left.
+  # ⛔ THERE IS DELIBERATELY NO govulncheck LANE HERE, and this comment exists
+  # so that nobody adds one again — I did, on 2026-11-08, and measured why it
+  # cannot work.
   #
-  # The lane is the organisation's, defined once in go-richdoc/.github. Its
-  # declared permissions (contents: read) are a subset of this workflow's, as
-  # a called workflow requires.
-  vulns:
-    uses: go-richdoc/.github/.github/workflows/vulns.yml@main
+  # `gofloor go-richdoc` counts this repository among the organisation's "11 Go
+  # repositories" and reports "no govulncheck step", because there IS a go.mod.
+  # But read kit.go: it is `//go:build tools`, it never builds, and it exists
+  # only so that `go mod tidy` keeps the landingkit requirement which Hugo
+  # resolves as a HUGO module (templates, not Go code that compiles or runs).
+  #
+  # So the organisation's shared lane, added here and then removed, failed in
+  # 34 seconds with the right answer:
+  #
+  #     govulncheck: no packages matched the provided patterns
+  #     ::error::govulncheck exited without reporting that it loaded the
+  #     packages (no SBOM in its output): the scan did not run, which is not
+  #     the same as finding nothing
+  #
+  # That refusal is the gate working. "Does this module reach a known
+  # vulnerability" has no meaning where no package builds, and forcing a green
+  # — a build tag, or `-scan module` — would publish a clean verdict about a
+  # scan that read nothing, which is the one failure the lane exists to
+  # prevent.
+  #
+  # What protects this repository instead: the landingkit version is pinned in
+  # go.mod and bumped by Renovate, and landingkit's OWN repository is a Go
+  # module whose CI can scan it. The question belongs there, not here.
 
   deploy:
     if: github.event_name != 'pull_request'
