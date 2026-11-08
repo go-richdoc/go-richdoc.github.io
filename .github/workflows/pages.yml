@@ -49,6 +49,20 @@ jobs:
         with:
           path: public
 
+  # ⛔ THIS REPOSITORY IS A GO MODULE, which is easy to forget because its
+  # output is a web page. `kit.go` pins github.com/go-fleettools/landingkit,
+  # Hugo resolves that module with the go command at the version go.mod names
+  # (see the build job above), and landingkit brings a dependency graph of its
+  # own. So the site is built from Go code whose advisories nobody was asking
+  # about: `gofloor go-richdoc` reported this repository alongside the ten
+  # libraries as "no govulncheck step", and it was the last one left.
+  #
+  # The lane is the organisation's, defined once in go-richdoc/.github. Its
+  # declared permissions (contents: read) are a subset of this workflow's, as
+  # a called workflow requires.
+  vulns:
+    uses: go-richdoc/.github/.github/workflows/vulns.yml@main
+
   deploy:
     if: github.event_name != 'pull_request'
     needs: build
