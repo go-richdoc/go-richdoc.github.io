@@ -49,6 +49,34 @@ jobs:
         with:
           path: public
 
+  # ⛔ THERE IS DELIBERATELY NO govulncheck LANE HERE, and this comment exists
+  # so that nobody adds one again — I did, on 2026-11-08, and measured why it
+  # cannot work.
+  #
+  # `gofloor go-richdoc` counts this repository among the organisation's "11 Go
+  # repositories" and reports "no govulncheck step", because there IS a go.mod.
+  # But read kit.go: it is `//go:build tools`, it never builds, and it exists
+  # only so that `go mod tidy` keeps the landingkit requirement which Hugo
+  # resolves as a HUGO module (templates, not Go code that compiles or runs).
+  #
+  # So the organisation's shared lane, added here and then removed, failed in
+  # 34 seconds with the right answer:
+  #
+  #     govulncheck: no packages matched the provided patterns
+  #     ::error::govulncheck exited without reporting that it loaded the
+  #     packages (no SBOM in its output): the scan did not run, which is not
+  #     the same as finding nothing
+  #
+  # That refusal is the gate working. "Does this module reach a known
+  # vulnerability" has no meaning where no package builds, and forcing a green
+  # — a build tag, or `-scan module` — would publish a clean verdict about a
+  # scan that read nothing, which is the one failure the lane exists to
+  # prevent.
+  #
+  # What protects this repository instead: the landingkit version is pinned in
+  # go.mod and bumped by Renovate, and landingkit's OWN repository is a Go
+  # module whose CI can scan it. The question belongs there, not here.
+
   deploy:
     if: github.event_name != 'pull_request'
     needs: build
