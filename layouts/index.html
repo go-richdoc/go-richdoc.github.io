@@ -25,11 +25,9 @@
   <div class="hero"><div class="wrap">
     <div>
       <h1 class="head">One document model,<br><span class="accent">and the formats that meet in it.</span></h1>
-      <p class="sub">A document is worth one representation, not one per format. <code>richdoc</code> is that representation, and the rest of this organisation reads and writes it — so Markdown, reStructuredText, LaTeX, HTML, an EPUB, a FictionBook, an email and a CSV all meet <b>in the middle</b> instead of pairwise. Pure Go, <code>CGO_ENABLED=0</code>, <code>GOOS=js</code> included. BSD-3-Clause.</p>
-      <div class="cta">
-        <a class="btn btn-primary" href="https://pkg.go.dev/github.com/go-richdoc/richdoc">{{ partial "icons/book.html" . }}The model →</a>
-        <a class="btn btn-ghost" href="https://github.com/go-richdoc">{{ partial "icons/github.html" . }}Read the source</a>
-      </div>
+      <p class="sub">A document is worth one representation, not one per format. <code>richdoc</code> is that representation, and the rest of this organisation reads and writes it — so Markdown, reStructuredText, LaTeX, HTML, an EPUB, a FictionBook, an email and a CSV all meet <b>in the middle</b> instead of pairwise. {{ if partial "mantra-on.html" . }}Go{{ else }}Pure Go{{ end }}, <code>{{ if not (partial "mantra-on.html" $) }}CGO_ENABLED=0{{ end }}</code>, <code>GOOS=js</code> included. {{ if not (partial "mantra-on.html" $) }}BSD-3-Clause{{ end }}.</p>
+      {{/* [[params.cta]] in hugo.toml: the kit renders the row */}}
+      {{ partial "cta.html" . }}
       {{/* ⛔ DERIVED. A count typed beside the data it counts is right the day
            it is typed and has no way of staying right. The third figure is
            ARITHMETIC on the first: n(n-1) ordered pairs of formats, which is
@@ -145,6 +143,6 @@ into something it is not</span></pre>
     </div>
   </div></section>
 
-  <footer><div class="wrap"><span>© the go-richdoc authors · BSD-3-Clause</span><span>Pure Go · CGO_ENABLED=0 · <code>GOOS=js</code> included</span></div></footer>
+  <footer><div class="wrap"><span>© the go-richdoc authors{{ if not (partial "mantra-on.html" $) }} · BSD-3-Clause{{ end }}</span><span>{{ if not (partial "mantra-on.html" $) }}Pure Go · {{ end }}{{ if not (partial "mantra-on.html" $) }}CGO_ENABLED=0 · {{ end }}<code>GOOS=js</code> included</span></div></footer>
 </body>
 </html>
