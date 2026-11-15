@@ -123,3 +123,17 @@ disableKinds = ["taxonomy", "term", "RSS", "sitemap", "404"]
   url = "https://github.com/go-richdoc/email"
   status = "ready"
   blurb = "**RFC 5322 messages and MIME in** — a `.eml`, or whatever an IMAP server hands back. ⛔ Which part is the body is the whole job: an `alternative` is the same message twice and must be read **once**, a `related` is one message plus the pictures it names by `Content-Id`, a `mixed` is a sequence, and a `signed` is the message plus a signature that is not content. ⛔ **Nothing is fetched, ever**: an HTML mail's remote `<img>` is a tracking pixel as often as a picture, so only `cid:` parts that travelled inside the message are inlined — there is no network code in the package and no way to ask for any."
+
+# The hero's buttons, rendered by landingkit's cta.html in the kit's order.
+[[params.cta]]
+  kind  = "docs"
+  href  = "https://pkg.go.dev/github.com/go-richdoc/richdoc"
+  label = "The model →"
+[[params.cta]]
+  kind  = "github"
+  href  = "https://github.com/go-richdoc"
+  label = "Read the source"
+
+# The architectures the tests RUN on, read from the library's CI.
+[params.mantra]
+  goarch = ["amd64"]
