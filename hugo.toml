@@ -118,6 +118,13 @@ disableKinds = ["taxonomy", "term", "RSS", "sitemap", "404"]
   blurb = "**Kindle MOBI in** — three formats stacked on each other, and reading one is reading all three: a Palm database of records, a record 0 holding the PalmDOC and MOBI headers, and the book itself as ONE HTML document cut into 4096-byte pieces and each piece compressed on its own. ⛔ The bytes at the end of a text record **are not text and are not compressed** — indexing data, and the overlap of a multibyte character split across two records — and feeding them to the decompressor does not fail: it produces plausible rubbish at the end of every record. ⛔ Pictures are named by **record number**, two different ways, and `kindle:embed:003C` is **base 32** and one-based: read as hexadecimal it would be wrong for every picture past the thirty-first and still look right for the first nine. Measured against Project Gutenberg's own *Pride and Prejudice* with Gutenberg's plain text of the same book as the judge: 125 816 words against 126 630, and 3 638 of 4 215 long sentences found verbatim. DRM, HUFF/CDIC and KF8 are refused **by name**, because none of those files is defective."
 
 [[params.repos]]
+  name = "rtf"
+  pkg = "github.com/go-richdoc/rtf"
+  url = "https://github.com/go-richdoc/rtf"
+  status = "ready"
+  blurb = "**Rich Text Format (`.rtf`) in** — read with one explicit stack and no recursion, so the depth a file nests to is a limit and not a stack overflow. ⛔ `\\binN` carries a 32-bit count in a six-byte control word, and it is checked against the bytes that **remain** before anything is allocated. An OLE `\\object` is never run: only its `\\result`, the picture or text Word shows in its place, is read. A hyperlink target goes through a scheme and control-character check. Unicode is `\\uN` with its fallback units skipped and surrogate pairs rejoined. Tested against an independent writer's output (macOS `textutil`) and against the LibreOffice filter fixtures, at 100% statement coverage and with no mutation surviving. No Word-written fixture is in the repository yet, and no timing is published: the allocation rate (576 743 allocations for 1 MB of synthetic text) is an open item."
+
+[[params.repos]]
   name = "email"
   pkg = "github.com/go-richdoc/email"
   url = "https://github.com/go-richdoc/email"
